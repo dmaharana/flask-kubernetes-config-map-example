@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: flask-app
+  name: flask-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-app
+
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: flask-app
+    spec:
+      containers:
+      - image: localhost:5001/flask-app:BUILD_NUM.0
+        name: flask-app
+        volumeMounts:
+        - name: conf
+          mountPath: "/app/conf"
+          readOnly: true
+        env:
+        # Define the environment variable
+        - name: ENV_LITERAL_MYVAR # Notice that the case is different here
+                                     # from the key name in the ConfigMap.
+          valueFrom:
+            configMapKeyRef:
+              name: app-config-literal           # The ConfigMap this value comes from.
+              key: ENV_LITERAL_MYVAR # The key to fetch.
+        - name: ENV_LITERAL_MYVAR2 
+          valueFrom:
+            configMapKeyRef:
+              name: app-config-literal
+              key: ENV_LITERAL_MYVAR2
+        - name: SECRET_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: credentials
+              key: username
+        - name: SECRET_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: credentials
+              key: password
+      volumes:
+      - name: conf
+        configMap:
+          name: app-config-file
