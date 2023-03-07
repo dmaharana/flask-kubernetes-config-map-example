@@ -25,3 +25,9 @@ $ curl http://localhost:8500/vars |jq
 
 ### Create a name space for the application
 `$ kubectl apply -f k8s-config-init/k8s-flask-app-namespace.yaml`
+
+### Kind cluster list
+`kind get clusters`
+
+### Kind cluster delete
+`kind delete cluster`
