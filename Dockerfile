@@ -1,4 +1,4 @@
-FROM python:3.11.2-slim-bullseye
+FROM python:3.13.0b1-slim-bullseye
 RUN mkdir /app
 COPY . /app/
 WORKDIR /app
